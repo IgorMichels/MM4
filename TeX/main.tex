@@ -33,8 +33,19 @@ Em março a situação continuou se agravando, principalmente na região da Lomb
 
 
 \section{Literatura}
-
 % trabalhos de modelagem sobre a situação da Itália
+
+Revisando a literatura, vemos trabalhos com objetivos similares em diversos locais, entre os quais podemos citar um trabalho de Calafiore, Novara e Possieri, onde foi elaborado um modelo discreto com base no modelo SIR \cite{calafiore2020modified}. No mesmo artigo os autores comentam que o trabalho foi feito de maneira rápida em virtude do contágio da COVID-19, a publicação se deu em 31 de março e foram utilizados dados até 30 de março, e buscou um modelo simples, mas eficaz para analisar o contágio e a eficiência das medidas preventivas. Abaixo temos o modelo proposto no artigo
+\begin{equation*}
+    \begin{split}
+        S(t + 1) & = S(t) - \beta \dfrac{S(t) I(t)}{S(t) + I(t)} \\
+        I(t + 1) & = I(t) + \beta \dfrac{S(t) I(t)}{S(t) + I(t)} - \gamma I(t) - \nu I(t) \\
+        R(t + 1) & = R(t) + \gamma I(t) \\
+        D(t + 1) & = D(t) + \nu I(t)
+    \end{split}
+\end{equation*}
+
+
 
 
 
