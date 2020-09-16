@@ -31,22 +31,36 @@ A situação italiana variou muito durante a pandemia, sendo o primeiro país eu
 
 Em março a situação continuou se agravando, principalmente na região da Lombardia, tendo o número de infectados um crescimento exponencial. Já para os mortos em virtude da COVID-19, a Itália registrava, até 11 de março, um total de 827 mortes, sendo que os falecidos possuíam uma média de 81 anos, sendo 88,7\% destes com idade superior a 69 anos. Além disso, dois terços dos falecidos apresentavam quadro de diabetes, câncer, alguma doença cardiovascular ou fumavam. Os números continuaram subindo, sendo que no dia 15 de março os casos de COVID-19 na Itália já passavam de 22.000, com média de idade de 64 anos e 1.625 mortes, a maior parte destes tendo mais de 69 anos \cite{REMUZZI20201225}\cite{10.1001/jama.2020.4344}.
 
-Atualmente a situação italiana volta a ter uma crescente no número de casos, porém com baixo número de mortos.
+Atualmente a situação italiana volta a ter uma crescente no número de casos, porém com baixo número de mortos. Essa inflação no total de infectados mas sem grande aumento no número de óbitos se dá, em especial, pela alta infecção de pessoas com idade inferior a 50 anos \cite{istoe} e pela volta ao trabalho por parte da população \cite{folha}.
+
+Dado o cenário italiano, nosso objetivo é o de modelar a epidemia no país seguindo um modelo epidemiológico de EDO's com os dados do site Our World in Data \cite{owid}.
 
 \section{Literatura}
 % trabalhos de modelagem sobre a situação da Itália
 
-Revisando a literatura, vemos trabalhos com objetivos similares em diversos locais, entre os quais podemos citar um trabalho de Calafiore, Novara e Possieri, onde foi elaborado um modelo discreto com base no modelo SIR \cite{calafiore2020modified}. No mesmo artigo os autores comentam que o trabalho foi feito de maneira rápida em virtude do contágio da COVID-19, a publicação se deu em 31 de março e foram utilizados dados até 30 de março, e buscou um modelo simples, mas eficaz para analisar o contágio e a eficiência das medidas preventivas. Abaixo temos o modelo proposto no artigo
+Revisando a literatura, vemos trabalhos com objetivos similares em diversos locais, entre os quais podemos citar um trabalho de Calafiore, Novara e Possieri, onde foi elaborado um modelo discreto com base no modelo SIR \cite{calafiore2020modified}. No mesmo artigo os autores comentam que o trabalho foi feito de maneira rápida em virtude do contágio da COVID-19, a publicação se deu em 31 de março e foram utilizados dados até 30 de março, e buscou um modelo simples, mas eficaz para analisar o contágio e a eficiência das medidas preventivas. Abaixo temos o modelo base do artigo
 \begin{equation*}
     \begin{split}
-        S(t + 1) & = S(t) - \beta \dfrac{S(t) I(t)}{S(t) + I(t)} \\
-        I(t + 1) & = I(t) + \beta \dfrac{S(t) I(t)}{S(t) + I(t)} - \gamma I(t) - \nu I(t) \\
-        R(t + 1) & = R(t) + \gamma I(t) \\
-        D(t + 1) & = D(t) + \nu I(t)
+        S(t + 1) & = S(t) - \beta \dfrac{S(t) I(t)}{S(t) + I(t)}, \\
+        I(t + 1) & = I(t) + \beta \dfrac{S(t) I(t)}{S(t) + I(t)} - \gamma I(t) - \nu I(t), \\
+        R(t + 1) & = R(t) + \gamma I(t), \\
+        D(t + 1) & = D(t) + \nu I(t).
     \end{split}
 \end{equation*}
 
+Note que a ideia utilizada é um modelo SIR discreto, além disso as mortes em virtude de algo diferente da doença modelada são ignoradas. Outra suposição do estudo foi o isolamento de cada região italiana\footnote{No estudo citado é feita a modelagem nacional e regional.}, a qual é aceitável em virtude das medidas de isolamento social que estavam em prática na época do estudo.
 
+Para considerar os casos assintomáticos de COVID-19 os pesquisadores consideraram $I(t) = \alpha\tilde{I}(t)$, para algum $\alpha \geq 1$, o que gerou a seguinte alteração no modelo do estudo:
+\begin{equation*}
+    \begin{split}
+        \tilde{S}(t + 1) & = \tilde{S}(t) - \beta \dfrac{\tilde{S}(t) \tilde{I}(t)}{\tilde{S}(t) + \tilde{I}(t)}, \\
+        \tilde{I}(t + 1) & = \tilde{I}(t) + \beta \dfrac{\tilde{S}(t) I(t)}{\tilde{S}(t) + \tilde{I}(t)} - \gamma \tilde{I}(t) - \nu \tilde{I}(t), \\
+        \tilde{R}(t + 1) & = \tilde{R}(t) + \gamma \tilde{I}(t), \\
+        D(t + 1) & = D(t) + \alpha \nu \tilde{I}(t).
+    \end{split}
+\end{equation*}
+
+Com essa alteração passa-se a considerar a transmissão do vírus por assintomáticos, resolvendo um dos problemas na modelagem dessa doença.
 
 
 
