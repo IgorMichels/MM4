@@ -9,8 +9,11 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{indentfirst}
+\usepackage{tikz}
 \usepackage[backend = biber]{biblatex}
 \addbibresource{referencias.bib}
+\tikzstyle{format} = [rectangle, draw, fill = blue!20]
+\usetikzlibrary{er,positioning}
 
 \geometry{left = 3cm, top = 3cm, bottom = 2cm, right = 2cm}
 
@@ -37,7 +40,7 @@ Dado o cenário italiano, nosso objetivo é o de modelar a epidemia no país seg
 
 \section{Literatura}
 % trabalhos de modelagem sobre a situação da Itália
-
+%primeiro, coisa leve
 Revisando a literatura, vemos trabalhos com objetivos similares em diversos locais, entre os quais podemos citar um trabalho de Calafiore, Novara e Possieri, onde foi elaborado um modelo discreto com base no modelo SIR \cite{calafiore2020modified}. No mesmo artigo os autores comentam que o trabalho foi feito de maneira rápida em virtude do contágio da COVID-19, a publicação se deu em 31 de março e foram utilizados dados até 30 de março, e buscou um modelo simples, mas eficaz para analisar o contágio e a eficiência das medidas preventivas. Abaixo temos o modelo base do artigo
 \begin{equation*}
     \begin{split}
@@ -60,14 +63,98 @@ Para considerar os casos assintomáticos de COVID-19 os pesquisadores considerar
     \end{split}
 \end{equation*}
 
-Com essa alteração passa-se a considerar a transmissão do vírus por assintomáticos, resolvendo um dos problemas na modelagem dessa doença.
+Com essa alteração passa-se a considerar a transmissão do vírus por assintomáticos, resolvendo um dos problemas na modelagem dessa doença. Os resultados dessa modelagem foram interessantes. O modelo se ajustou muito bem aos dados que possuíam, entretanto o modelo subestimou a pandemia, tanto em tempo quanto em infecções. Pelo modelo, o pico de COVID-19 na Itália se daria no começo de abril, com uma quantidade de infectados entre 80 e 90 mil pessoas. Já na realidade o pico se deu na segunda metade de abril com quase 110 mil infectados. Note que o modelo fez uma aproximação razoavelmente boa, aproximando bem o pico da doença.
 
+%outro
+Mesmo nos estágios iniciais da pandemia, modelos mais complicados foram propostos. Eis o modelo SEPIAHQRD \cite{Gatto10484}:
+
+\begin{equation*}
+    \begin{split}
+        \dot{S} & = -\lambda S,\\
+        \dot{E} & = \lambda S - \delta_E E, \\
+        \dot{P} & = \delta_E E - \delta_P P, \\
+        \dot{I} & = \sigma \delta_P P - (\eta + \gamma_I + \alpha_I) I, \\
+        \dot{A} & = (1-\sigma) \delta_P P - \gamma_A A, \\
+        \dot{H} & = (1-\zeta) \eta I - (\gamma_H + \alpha_H) H, \\
+        \dot{Q} & = \zeta \eta I - \gamma_Q Q, \\
+        \dot{R} & = \gamma_I I + \gamma_A A + \gamma_H H, \\
+        \dot{D} & = \alpha_I I + \alpha_H H,
+    \end{split}
+\end{equation*}
+
+\noindent onde $S$ representa os suscetíveis, $E$ os expostos, $P$ os pré-sintomáticos, $I$ os infectados, $A$ os assintomáticos, $H$ os hospitalizados, $Q$ os em quarentena, $R$ os recuperados e $D$ os mortos. 
+
+% outro
+Além do modelo SEPIAHQRD, outro modelo que surgiu nas fases inicias da pandemia explora o modelo SIDARTHE \cite{JOUR}. Tal modelo possui o seguinte desenho compartimental
+
+\begin{center}
+    \begin{tikzpicture}[edge from parent/.style = {draw, -latex}]
+        \node[entity] (S) {S};
+        \node[entity] (I) [right = 2.5cm of S] {I};
+        \node[entity] (D) [right = 2.5cm of I] {D};
+        \node[entity] (R) [below = 3cm of D] {R};
+        \node[entity] (A) [left = 2.5cm of R] {A};
+        \node[entity] (H) [left = 2.5cm of A] {H};
+        \node[entity] (T) [below = 3cm of R] {T};
+        \node[entity] (E) [left = 2.5cm of T] {E};
+        
+        \path[->]
+            (S) edge node[below] {$\alpha, ~\beta, ~\gamma, ~\delta$} (I)
+                edge node[above] {Contágio} (I)
+            (I) edge node[below] {$\varepsilon$} (D)
+                edge node[above] {Diagnóstico} (D)
+                edge node[left] {$\zeta$} (A)
+                edge node[sloped, above] {Sintomas} (A)
+                edge node[sloped, above] {Curado} (H)
+                edge node[below] {$\lambda$} (H)
+            (D) edge node[left] {$\eta$} (R)
+                edge node[sloped, above] {Sintomas} (R)
+                edge [bend left = 22] node[sloped, above] {Curado} (H)
+                edge [bend left = 22] node[below] {$\rho$} (H)
+            (A) edge [bend left = 10] node[sloped, above] {Curado} (H)
+                edge [bend left = 10] node[below] {$\kappa$} (H)
+                edge node[above] {Diagnóstico} (R)
+                edge node[below] {$\theta$} (R)
+                edge node[sloped, above] {Crítico} (T)
+                edge node[below] {$\mu$} (T)
+            (R) edge node[sloped, above] {Crítico} (T)
+                edge node[left] {$\nu$} (T)
+                edge [bend left = 20] node[sloped, above] {Curado} (H)
+                edge [bend left = 20] node[below] {$\xi$} (H)
+            (T) edge node[above] {Morte} (E)
+                edge node[below] {$\tau$} (E)
+                edge node[sloped, above] {Curado} (H)
+                edge node[below] {$\sigma$} (H);
+    \end{tikzpicture}
+\end{center}
+
+\noindent onde $S$ representa os suscetíveis, $I$ os assintomáticos não diagnosticados, $D$ os assintomáticos diagnosticados, $A$ os sintomáticos não diagnosticados, $R$ os sintomáticos diagnosticados, $T$ os indivíduos hospitalizados, $H$ os indivíduos curados e $E$ os que faleceram. Note que, assim como os modelos anteriores, as mortes que ocorrem por motivo distinto da COVID-19 são desprezadas.
+
+Uma ideia muito interessante do modelo SIDARTHE é essa divisão em compartimentos separados os indivíduos de acordo com seu status atual (assintomático/sintomático e diagnosticado/não diagnosticado). Essa divisão, juntamente com o estabelecimento de quatro parâmetros de infecção busca refletir a ideia de que pessoas infectadas mas que não sabem que portam o vírus tendem a ter uma taxa de transmissão diferente de pessoas que sabem que portam o vírus, por exemplo. Dessa forma, cada um dos grupos de infectados irá transmitir a doença de acordo com um parâmetro diferente. Colocando essa ideia em prática, temos as seguintes equações:
+\begin{equation*}
+    \begin{split}
+        \dot{S}(t) & = -S(t)(\alpha I(t) + \beta D(t) + \gamma A(t) + \delta R(t)),\\
+        \dot{I}(t) & = S(t)(\alpha I(t) + \beta D(t) + \gamma A(t) + \delta R(t)) - (\varepsilon + \zeta + \lambda)I(t), \\
+        \dot{D}(t) & = \varepsilon I(t) - (\eta + \rho)D(t), \\
+        \dot{A}(t) & = \zeta I(t) - (\theta + \mu + \kappa)A(t), \\
+        \dot{R}(t) & = \eta D(t) + \theta A(t) - (\nu + \xi)R(t), \\
+        \dot{T}(t) & = \mu A(t) + \nu R(t) - (\sigma + \tau)T(t), \\
+        \dot{H}(t) & = \lambda I(t) + \rho D(t) + \kappa A(t) + \xi R(t) + \sigma T(t), \\
+        \dot{E}(t) & = \tau T(t).
+    \end{split}
+\end{equation*}
+
+
+
+
+
+% último
+\cite{fSEIRD}
 
 
 \section{Metodologia}
 
-% criar um modelo
-
+% criar um modelo 
 
 
 \printbibliography
