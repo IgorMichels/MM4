@@ -66,6 +66,7 @@ Para considerar os casos assintomáticos de COVID-19 os pesquisadores considerar
 Com essa alteração passa-se a considerar a transmissão do vírus por assintomáticos, resolvendo um dos problemas na modelagem dessa doença. Os resultados dessa modelagem foram interessantes. O modelo se ajustou muito bem aos dados que possuíam, entretanto o modelo subestimou a pandemia, tanto em tempo quanto em infecções. Pelo modelo, o pico de COVID-19 na Itália se daria no começo de abril, com uma quantidade de infectados entre 80 e 90 mil pessoas. Já na realidade o pico se deu na segunda metade de abril com quase 110 mil infectados. Note que o modelo fez uma aproximação razoavelmente boa, aproximando bem o pico da doença.
 
 %outro
+%fazer um resumo bom
 Mesmo nos estágios iniciais da pandemia, modelos mais complicados foram propostos. Eis o modelo SEPIAHQRD \cite{Gatto10484}:
 
 \begin{equation*}
@@ -83,6 +84,7 @@ Mesmo nos estágios iniciais da pandemia, modelos mais complicados foram propost
 \end{equation*}
 
 \noindent onde $S$ representa os suscetíveis, $E$ os expostos, $P$ os pré-sintomáticos, $I$ os infectados, $A$ os assintomáticos, $H$ os hospitalizados, $Q$ os em quarentena, $R$ os recuperados e $D$ os mortos. 
+
 
 % outro
 Além do modelo SEPIAHQRD, outro modelo que surgiu nas fases inicias da pandemia explora o modelo SIDARTHE \cite{JOUR}. Tal modelo possui o seguinte desenho compartimental
@@ -128,9 +130,7 @@ Além do modelo SEPIAHQRD, outro modelo que surgiu nas fases inicias da pandemia
     \end{tikzpicture}
 \end{center}
 
-\noindent onde $S$ representa os suscetíveis, $I$ os assintomáticos não diagnosticados, $D$ os assintomáticos diagnosticados, $A$ os sintomáticos não diagnosticados, $R$ os sintomáticos diagnosticados, $T$ os indivíduos hospitalizados, $H$ os indivíduos curados e $E$ os que faleceram. Note que, assim como os modelos anteriores, as mortes que ocorrem por motivo distinto da COVID-19 são desprezadas.
-
-Uma ideia muito interessante do modelo SIDARTHE é essa divisão em compartimentos separados os indivíduos de acordo com seu status atual (assintomático/sintomático e diagnosticado/não diagnosticado). Essa divisão, juntamente com o estabelecimento de quatro parâmetros de infecção busca refletir a ideia de que pessoas infectadas mas que não sabem que portam o vírus tendem a ter uma taxa de transmissão diferente de pessoas que sabem que portam o vírus, por exemplo. Dessa forma, cada um dos grupos de infectados irá transmitir a doença de acordo com um parâmetro diferente. Colocando essa ideia em prática, temos as seguintes equações:
+\noindent onde $S$ representa os suscetíveis, $I$ os assintomáticos não diagnosticados, $D$ os assintomáticos diagnosticados, $A$ os sintomáticos não diagnosticados, $R$ os sintomáticos diagnosticados, $T$ os indivíduos hospitalizados, $H$ os indivíduos curados e $E$ os que faleceram. Note que, assim como os modelos anteriores, as mortes que ocorrem por motivo distinto da COVID-19 são desprezadas. Tendo visto a ideia geral do modelo, vamos as equações propostas:
 \begin{equation*}
     \begin{split}
         \dot{S}(t) & = -S(t)(\alpha I(t) + \beta D(t) + \gamma A(t) + \delta R(t)),\\
@@ -144,18 +144,30 @@ Uma ideia muito interessante do modelo SIDARTHE é essa divisão em compartiment
     \end{split}
 \end{equation*}
 
+Aqui $\alpha$, $\beta$, $\gamma$ e $\delta$ representam taxas de infecção, $\varepsilon$ e $\theta$ a probabilidade de detecção da doença, os parâmetros $\zeta$ e $\eta$ modelam a probabilidade de um infectado desenvolver sintomas, já $\mu$ e $\nu$ são parâmetros que denotam a probabilidade do desenvolvimento de sintomas que podem levar o indivíduo a óbito, o que foi modelado com o parâmetro $\tau$. Por fim, $\lambda$, $\rho$, $\kappa$, $\xi$ e $\sigma$ modelam a recuperação dos indivíduos.
 
+Uma ideia muito interessante proposta no modelo SIDARTHE é a divisão do infectados em compartimentos separados, de acordo com seu status atual (assintomático/sintomático e diagnosticado/não diagnosticado). Essa divisão, juntamente com o estabelecimento de quatro parâmetros de infecção busca refletir a ideia de que pessoas infectadas mas que não sabem que portam o vírus tendem a ter uma taxa de transmissão diferente de pessoas que sabem que portam o vírus. Dessa forma, cada grupo de infectados irá transmitir a doença de acordo com um parâmetro diferente. Entre esses parâmetros, normalmente se tem $\alpha > \gamma$, uma vez que as pessoas tendem a evitar contato com pessoas que, mesmo sem diagnóstico de COVID-19, apresentam sintomas. Além dessa desigualdade, em geral vale também que $\gamma > \beta$ e $\gamma > \delta$, pois espera-se que indivíduos que estão cientes que portam o vírus fiquem em isolamento social.
 
-
+Para efeito de modelagem, foi considerado $S + I + D + A + R + T + H + E = 1$, ou seja, foram tomadas tais medidas e divido o valor pela população italiana\footnote{Cerca de 60 milhões de pessoas.}. Com uma análise matemática, percebe-se que os equilíbrios do modelo SIDARTHE se dão apenas em estados em que temos $I = D = A = R = T = 0$, ou seja, quando o número de infetados zerar. Durante a modelagem, os autores variaram os parâmetros de acordo com decisões políticas adotadas no país, como a implementação de lockdown, por exemplo. Com essa modelagem, foi obtido um resultado interessante, com curvas similares as dos dados observados.
 
 % último
+
+
+
+
+
 \cite{fSEIRD}
 
 
 \section{Metodologia}
 
 % criar um modelo 
-
+%votaça1
+%SI
+%SIR
+%SEIR
+%SEIRD
+%outro: _____
 
 \printbibliography
 
