@@ -35,9 +35,8 @@ A situação italiana variou muito durante a pandemia, sendo o primeiro país eu
 
 Em março a situação continuou se agravando, principalmente na região da Lombardia, dessa forma, a partir de 09/03/2020, o governo italiano passou a tomar medidas severas de isolamento social \cite{piccolomini}. Já para os mortos em virtude da COVID-19, a Itália registrava, até 11 de março, um total de 827 mortes, sendo que os falecidos possuíam uma média de 81 anos, dos quais 88,7\% possuíam idade superior a 69 anos. Além disso, dois terços dos falecidos apresentavam quadro de diabetes, câncer, alguma doença cardiovascular ou fumavam. Os números continuaram subindo, sendo que no dia 15 de março os casos de COVID-19 na Itália já passavam de 22.000, com média de idade de 64 anos e 1.625 mortes, a maior parte destes possuindo mais de 69 anos \cite{REMUZZI20201225}\cite{10.1001/jama.2020.4344}.
 
-% novo parágrafo
 Entre março e o final de abril as políticas governamentais de isolamento social atingem uma pontuação superior a 90 pontos no Índice de Rigor Governamental do Our World in Data \cite{owid}, o que se mostrou eficiente para diminuir o total de casos ativos \cite{italia}. Entre maio e meados de julho a quantidade de indivíduos atualmente positivados só decresceu, tendo uma certa estabilidade até meados de agosto, quando iniciou-se uma nova crescente nos casos ativos.
-% alterei esse também
+
 Apesar da nova crescente no número de casos, o número de mortos está muito abaixo da primeira onda de casos. Esse fato se dá, em especial, pela alta infecção de pessoas com idade inferior a 50 anos \cite{istoe_idade} em virtude da volta ao trabalho por parte da população \cite{folha_trabalho}. Além disso, a volta às aulas, de forma presencial, ocorreu no dia 14/09 \cite{uol_aulas}, o que pode implicar em mais um aumento no número de casos.
 
 \section{Revisão da Literatura}
@@ -74,7 +73,35 @@ Com essa alteração passa-se a considerar a transmissão do vírus por assintom
 \subsection{Modelo SEPIAHQRD}
 % ver resumo
 Mesmo nos estágios iniciais da pandemia, modelos mais complicados foram propostos. Eis o modelo SEPIAHQRD \cite{Gatto10484}:
+\begin{center}
+    \begin{tikzpicture}[edge from parent/.style = {draw, -latex}]
+        \node [entity, draw = blue, thick] (S) {$S_i$};
+        \node [entity, draw = orange, thick] (E) [right = 1.5cm of S] {$E_i$};
+        \node [entity, draw = orange, thick] (P) [right = 1.5cm of E] {$P_i$};
+        \node [entity, draw = orange, thick] (I) [below = 1.5cm of E] {$I_i$};
+        \node [entity, draw = orange, thick] (A) [below = 1.5cm of P] {$A_i$};
+        \node [entity, draw = red, thick] (H) [below = 1.5cm of S] {$H_i$};
+        \node [entity, draw = yellow, thick] (Q) [below = 1.5cm of I] {$Q_i$};
+        \node [entity, draw = green, thick] (R) [below = 1.5cm of A] {$R_i$};
+        \node [entity, draw = brown, thick] (D) [below = 1.5cm of H] {$D_i$};
+        
+        \path[->]
+            (S) edge [blue, thick] node[above] {$\lambda$} (E)
+            (E) edge [orange, thick] node[above] {$\delta_E$} (P)
+            (P) edge [orange, thick] node[right] {$(1 - \sigma)\delta_P$} (A)
+                edge [orange, thick] node[left] {$\sigma \delta_P$} (I)
+            (I) edge [red, thick] node[above] {$(1 - \zeta)\nu$} (H)
+                edge [brown, thick] node[above] {$\alpha_I$} (D)
+                edge [yellow, thick] node[left] {$\zeta \nu$} (Q)
+                edge [green, thick] node[above] {$\gamma_I$} (R)
+            (A) edge [green, thick] node[left] {$\gamma_A$} (R)
+            (H) edge [bend left = 5, green, thick] node[above] {$\gamma_H$} (R)
+            (H) edge [brown, thick] node[left] {$\alpha_H$} (D)
+            (Q) edge [green, thick] node[above] {$\gamma_Q$} (R);
+    \end{tikzpicture}
+\end{center}
 
+O que nos dá o seguinte conjunto de equações:
 \begin{equation*}
     \begin{split}
         \dot{S} & = -\lambda S,\\
@@ -196,9 +223,6 @@ Para a calibração do modelo foram utilizadas algumas técnicas estatísticas c
 \section{Metodologia}
 % Seção de Metodologia propondo um modelo matemático para a situação epidemiológica do país escolhido justificando a sua adequação para a situação epidemiológica observada até o momento no país. Esta seção deve descrever completamente o modelo e seus compartimentos, todas as suas equações acompanhadas de análise dimensional e descrição e interpretação de todos os parâmetros utilizados. Esta seção deverá ainda descrever o processo de captura dos dados epidemiológicos do país de interesse.
 
-\subsection{Obtenção dos Dados} %talvez mudar de lugar
-
-Todos os dados utilizados durante a modelagem foram obtidos exclusivamente do \textit{Our world in data} \cite{owid}, através de sua página voltada a epidemia de COVID-19. Já a modelagem foi realizada utilizando o SageMath 9.0.
 
 \subsection{Escolha do Modelo}
 
@@ -213,21 +237,21 @@ Entretanto, conforme visto pela revisão da literatura, o modelo SEIRD nativo n�
 Nosso modelo trabalha de forma análoga aos demais modelos de EDO's, ou seja, de forma compartimental. Para a modelagem, optamos por trabalhar com os valores absolutos em cada compartimento e com população constante, dessa forma, a natalidade e a mortalidade natural foram desprezadas, o que implica em uma população constante, logo, sendo $N$ a população italiana, sempre vale que $N = S + E + I + R + D$. Abaixo temos o desenho compartimental do modelo.
 \begin{center}
     \begin{tikzpicture}[edge from parent/.style = {draw, -latex}]
-        \node[entity] (S) {S};
-        \node[entity] (E) [right = 2.5cm of S] {E};
-        \node[entity] (I) [right = 2.5cm of E] {I};
-        \node[entity] (R) [right = 2.5cm of I] {R};
-        \node[entity] (D) [below = 2.5cm of I] {D};
+        \node [entity, draw = blue, thick] (S) {S};
+        \node [entity, draw = red, thick] (E) [right = 2.5cm of S] {E};
+        \node [entity, draw = red, thick] (I) [right = 2.5cm of E] {I};
+        \node [entity, draw = green, thick] (R) [right = 2.5cm of I] {R};
+        \node [entity, draw = brown, thick] (D) [below = 2cm of I] {D};
         
         \path[->]
-            (S) edge node[above] {$\dfrac{\beta(t)}{N}SI$} (E)
-                edge node[below] {Contaminação} (E)
-            (E) edge node[above] {$\alpha(t) I$} (I)
-                edge node[below] {Infecciosos} (I)
-            (I) edge node[above] {$\dfrac{1 - f(t)}{T_I}I$} (R)
-                edge node[below] {Recuperações} (R)
-                edge node[right] {$\dfrac{f(t)}{T_I}I$} (D)
-                edge node[sloped, below] {Mortes} (D);
+            (S) edge [blue, thick] node[above] {$\dfrac{\beta(t)}{N}SI$} (E)
+                edge [blue, thick] node[below] {Contaminação} (E)
+            (E) edge [red, thick] node[above] {$\alpha(t) I$} (I)
+                edge [red, thick] node[below] {Infecciosos} (I)
+            (I) edge [green, thick] node[above] {$\dfrac{1 - f(t)}{T_I}I$} (R)
+                edge [green, thick] node[below] {Recuperações} (R)
+                edge [brown, thick] node[right] {$\dfrac{f(t)}{T_I}I$} (D)
+                edge [brown, thick] node[sloped, below] {Mortes} (D);
     \end{tikzpicture}
 \end{center}
 
@@ -323,6 +347,10 @@ Além disso, temos
 \end{equation*}
 
 \noindent de onde conclui-se que $f(t)$ é adimensional.
+
+\subsection{Obtenção dos Dados}
+
+Todos os dados utilizados para realizar a modelagem foram obtidos exclusivamente do Our world in data \cite{owid}, através de sua página voltada a epidemia de COVID-19. Para trabalhar com os mesmos, baixamos o arquivo csv com os dados necessários e manipulamos os mesmos com o SageMath 9.0. Todos os arquivos estarão disponíveis no GitHub do artigo \cite{github}.
 
 \printbibliography
 
