@@ -9,6 +9,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{indentfirst}
+\usepackage{xcolor}
 \usepackage{tikz}
 \usepackage[backend = biber]{biblatex}
 \addbibresource{referencias.bib}
@@ -101,42 +102,42 @@ Além do modelo SEPIAHQRD, outro modelo que surgiu nas fases inicias da pandemia
 
 \begin{center}
     \begin{tikzpicture}[edge from parent/.style = {draw, -latex}]
-        \node[entity] (S) {S};
-        \node[entity] (I) [right = 2.5cm of S] {I};
-        \node[entity] (D) [right = 2.5cm of I] {D};
-        \node[entity] (R) [below = 3cm of D] {R};
-        \node[entity] (A) [left = 2.5cm of R] {A};
-        \node[entity] (H) [left = 2.5cm of A] {H};
-        \node[entity] (T) [below = 3cm of R] {T};
-        \node[entity] (E) [left = 2.5cm of T] {E};
+        \node [entity, draw = blue, thick] (S) {S};
+        \node [entity, draw = orange, thick] (I) [right = 2.5cm of S] {I};
+        \node [entity, draw = orange, thick] (D) [right = 2.5cm of I] {D};
+        \node [entity, draw = orange, thick] (R) [below = 3cm of D] {R};
+        \node [entity, draw = orange, thick] (A) [left = 2.5cm of R] {A};
+        \node [entity, draw = green, thick] (H) [left = 2.5cm of A] {H};
+        \node [entity, draw = red, thick] (T) [below = 3cm of R] {T};
+        \node [entity, draw = brown, thick] (E) [left = 2.5cm of T] {E};
         
         \path[->]
-            (S) edge node[below] {$\alpha, ~\beta, ~\gamma, ~\delta$} (I)
-                edge node[above] {Contágio} (I)
-            (I) edge node[below] {$\varepsilon$} (D)
-                edge node[above] {Diagnóstico} (D)
-                edge node[left] {$\zeta$} (A)
-                edge node[sloped, above] {Sintomas} (A)
-                edge node[sloped, above] {Curado} (H)
-                edge node[below] {$\lambda$} (H)
-            (D) edge node[left] {$\eta$} (R)
-                edge node[sloped, above] {Sintomas} (R)
-                edge [bend left = 22] node[sloped, above] {Curado} (H)
-                edge [bend left = 22] node[below] {$\rho$} (H)
-            (A) edge [bend left = 10] node[sloped, above] {Curado} (H)
-                edge [bend left = 10] node[below] {$\kappa$} (H)
-                edge node[above] {Diagnóstico} (R)
-                edge node[below] {$\theta$} (R)
-                edge node[sloped, above] {Crítico} (T)
-                edge node[below] {$\mu$} (T)
-            (R) edge node[sloped, above] {Crítico} (T)
-                edge node[left] {$\nu$} (T)
-                edge [bend left = 20] node[sloped, above] {Curado} (H)
-                edge [bend left = 20] node[below] {$\xi$} (H)
-            (T) edge node[above] {Morte} (E)
-                edge node[below] {$\tau$} (E)
-                edge node[sloped, above] {Curado} (H)
-                edge node[below] {$\sigma$} (H);
+            (S) edge [blue, thick] node[below] {$\alpha, ~\beta, ~\gamma, ~\delta$} (I)
+                edge [blue, thick] node[above] {Contágio} (I)
+            (I) edge [orange, thick] node[below] {$\varepsilon$} (D)
+                edge [orange, thick] node[above] {Diagnóstico} (D)
+                edge [yellow, thick] node[left] {$\zeta$} (A)
+                edge [yellow, thick] node[sloped, above] {Sintomas} (A)
+                %edge [bend left = 20, green, thick] node[sloped, above] {Curado} (H)
+                edge [bend left = 20, green, thick] node[below] {$\lambda$} (H)
+            (D) edge [yellow, thick] node[left] {$\eta$} (R)
+                edge [yellow, thick] node[sloped, above] {Sintomas} (R)
+                %edge [bend left = 15, green, thick] node[sloped, above] {Curado} (H)
+                edge [bend left = 15, green, thick] node[below] {$\rho$} (H)
+            (A) edge [bend left = 5, green, thick] node[sloped, above] {Curado} (H)
+                edge [bend left = 5, green, thick] node[below] {$\kappa$} (H)
+                edge [orange, thick] node[above] {Diagnóstico} (R)
+                edge [orange, thick] node[below] {$\theta$} (R)
+                edge [red, thick] node[sloped, above] {Crítico} (T)
+                edge [red, thick] node[below] {$\mu$} (T)
+            (R) edge [red, thick] node[sloped, above] {Crítico} (T)
+                edge [red, thick] node[left] {$\nu$} (T)
+                %edge [bend left = 17, green, thick] node[sloped, above] {Curado} (H)
+                edge [bend left = 17, green, thick] node[below] {$\xi$} (H)
+            (T) edge [brown, thick] node[above] {Morte} (E)
+                edge [brown, thick] node[below] {$\tau$} (E)
+                %edge [bend left = 10, green, thick] node[sloped, above] {Curado} (H)
+                edge [bend left = 10, green, thick] node[below] {$\sigma$} (H);
     \end{tikzpicture}
 \end{center}
 
