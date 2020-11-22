@@ -284,6 +284,38 @@ Além disso, temos
 % 
 Todos os dados utilizados para realizar a modelagem foram obtidos exclusivamente do Our world in data \cite{owid}, através de sua página voltada a epidemia de COVID-19. Para trabalhar com os mesmos, baixamos o arquivo csv com os dados necessários e manipulamos os mesmos com o SageMath 9.0. Todos os arquivos estarão disponíveis no GitHub do artigo \cite{github}.
 
+\section{Algumas Análises do Modelo}
+
+Em primeiro lugar é de nosso interesse analisar quais os equilíbrios do modelo proposto, dessa forma, ao igualar todas as equações de \ref{fSEIRD} a zero obtemos\footnote{Não estamos considerando as derivadas de $\beta(t)$ e $\alpha(t)$ pois elas são funções definidas de diferentes formas em cada intervalo de tempo e, além disso, $\alpha(t)$ tem derivada nula em cada um desses intervalos, então optamos por trabalhar com elas durante a análise.}
+\begin{equation*}
+    \begin{split}
+        0 & = -\dfrac{\beta(t)}{N}SI, \\
+        0 & = \dfrac{\beta(t)}{N}SI - \alpha(t) E, \\
+        0 & = \alpha(t) E - \dfrac{1}{T_I}I, \\
+        0 & = \dfrac{1 - f(t)}{T_I}I, \\
+        0 & = \dfrac{f(t)}{T_I}I.
+    \end{split}
+\end{equation*}
+
+Um detalhe a ser observado é que $\beta(t)$ é nulo apenas se $\beta(0) = 0$, o que gera o equilíbrio $[N, 0, 0, 0, 0]$, mas que não é de nosso interesse, pois nesse caso não haveria epidemia. Assim, considerando $\beta(t) > 0$ temos, pelas duas últimas equações, que no equilíbrio $I = 0$.
+
+Agora, supondo $\alpha(t) > 0$, o que é uma premissa razoável para a COVID-19, podemos ver, pela terceira equação, que $E = 0$, o que nos dá equilíbrios da forma $[s, 0, 0, r, N - s - r]$, ou seja, temos apenas equilíbrios livre de doença.
+
+Já se considerando que $\alpha(t) = 0$, poderemos ter, em algum momento da interação, algum equilíbrio da forma $[s, e, 0, r, N - s - e - r]$, o que representaria que a doença deixou de ser infecciosa.
+
+Além dos equilíbrios, é de nosso interesse conhecer o $\mathcal{R}(t)$ do modelo proposto. Após alguns cálculos, os quais podem ser encontrados no GitHub \cite{github}, podemos ver que o $\mathcal{R}(t)$ pode ser escrito como
+\[\mathcal{R}(t) = \beta(t)\cdot T_I\]
+
+\noindent e, em especial, temos também que
+\[\mathcal{R}_0 = \beta(t_0)\cdot T_I.\]
+
+
+
+
+
+
+
+
 \printbibliography
 
 \end{document}
