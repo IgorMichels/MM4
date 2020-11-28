@@ -297,11 +297,19 @@ Em primeiro lugar é de nosso interesse analisar quais os equilíbrios do modelo
     \end{split}
 \end{equation*}
 
-Um detalhe a ser observado é que $\beta(t)$ é nulo apenas se $\beta(0) = 0$, o que gera o equilíbrio $[N, 0, 0, 0, 0]$, mas que não é de nosso interesse, pois nesse caso não haveria epidemia. Assim, considerando $\beta(t) > 0$ temos, pelas duas últimas equações, que no equilíbrio $I = 0$.
+Um detalhe a ser observado é que $\beta(t)$ é nulo apenas se $\beta(0) = 0$, o que gera o equilíbrio $[N, 0, 0, 0, 0]$, mas que não é de nosso interesse, pois nesse caso não haveria epidemia. Assim, considerando $\beta(t) > 0$ temos, pelas duas últimas equações, que no equilíbrio $I = 0$, sendo este, com $\beta(0) = 0$, um equilíbrio estável.
 
 Agora, supondo $\alpha(t) > 0$, o que é uma premissa razoável para a COVID-19, podemos ver, pela terceira equação, que $E = 0$, o que nos dá equilíbrios da forma $[s, 0, 0, r, N - s - r]$, ou seja, temos apenas equilíbrios livre de doença.
 
-Já se considerando que $\alpha(t) = 0$, poderemos ter, em algum momento da interação, algum equilíbrio da forma $[s, e, 0, r, N - s - e - r]$, o que representaria que a doença deixou de ser infecciosa.
+Já ao se considerar $\alpha(t) = 0$ poderemos ter, em algum momento da interação, algum equilíbrio da forma $[s, e, 0, r, N - s - e - r]$, o que representaria que a doença deixou de ser infecciosa, pelo menos naquele intervalo de tempo.
+
+Com algumas contas, podemos ver que o traço da matriz jacobiana do modelo é
+\[-\alpha -\dfrac{I\beta}{N} - \dfrac{1}{T_I},\]
+
+\noindent que é estritamente negativo. Já o determinante é
+\[-\dfrac{I\alpha\beta}{NT_I},\]
+
+\noindent o qual é nulo no equilíbrio, assim os equilíbrios do sistema são estáveis e, além disso, confirmando a análise anterior, são múltiplos.
 
 Além dos equilíbrios, é de nosso interesse conhecer o $\mathcal{R}(t)$ do modelo proposto. Após alguns cálculos, os quais podem ser encontrados no GitHub \cite{github}, podemos ver que o $\mathcal{R}(t)$ pode ser escrito como
 \[\mathcal{R}(t) = \beta(t)\cdot T_I\]
