@@ -11,6 +11,8 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage[backend = biber]{biblatex}
 \addbibresource{referencias.bib}
 \tikzstyle{format} = [rectangle, draw, fill = blue!20]
@@ -27,9 +29,13 @@ Igor Patrício Michels}
 
 \maketitle
 
-\section{Introdução}
+\section*{Resumo}
 
-O presente artigo visa descrever, por meio de um modelo epidemiológico de EDO's, os casos de COVID-19 na Itália. A modelagem se dará por meio de modelos de EDO's, os quais foram vistos durante as aulas de Modelagem de Fenômenos Biológicos (Modelagem Matemática IV) ministrada pelo professor Flávio Codeço Coelho da FGV - EMAp.
+O presente artigo visa descrever, por meio de um modelo epidemiológico de EDO's, os casos de COVID-19 na Itália afim de possibilitar um maior entendimento do contágio da COVID-19 na Itália. O modelo proposto é originado a partir do modelo SEIRD com dados até dia 05/12/2020 para ajustar parâmetros, os quais foram encontrados pelo método de otimização de mínimos quadrados. Os parâmetros variam com o tempo e foram ajustados em intervalos de 15 dias, o que gerou um bom ajuste do modelo, além de possibilitar análises de como estão ocorrendo as infecções de COVID-19 na Itália. Também simulamos a situação italiana para os próximos dias, até o final desse ano, onde estima-se uma crescente no número de casos e mortes, junto de um alto $R_0$.
+
+\noindent \textbf{Palavras-chave: COVID-19, Itália, SEIRD, Mínimos quadrados.}
+
+\section{Introdução}
 
 A situação italiana variou muito durante a pandemia, sendo o primeiro país europeu a atingir uma marca superior a 100 infectados pela COVID-19, fato que ocorreu após 25 dias do primeiro infectado, conforme análise dos gráficos do site Our World in Data \cite{owid}. Em parte, esses números se devem ao fato de que a Itália foi surpreendida com um paciente zero assintomático e um paciente um que custou a desenvolver sintomas, com este último tendo inúmeros compromissos na época em que foi infectado, no início de fevereiro \cite{dn}\cite{cm}.
 
@@ -39,13 +45,6 @@ Entre março e o final de abril as políticas governamentais de isolamento socia
 
 Apesar da nova crescente no número de casos, o número de mortos está muito abaixo da primeira onda de casos. Esse fato se dá, em especial, pela alta infecção de pessoas com idade inferior a 50 anos \cite{istoe_idade} em virtude da volta ao trabalho por parte da população \cite{folha_trabalho}. Além disso, a volta às aulas, de forma presencial, ocorreu no dia 14/09 \cite{uol_aulas}, o que está gerando um novo aumento no número de casos.
 
-% \section{Revisão da Literatura}
-% % trabalhos de modelagem sobre a situação da Itália
-
-% Nessa seção iremos apresentar alguns dos trabalhos que buscaram modelar a epidemia de coronavírus na Itália. Estamos dando ênfase a modelos compartimentais, apresentando um modelo discreto e três modelos de EDO's.
-
-% \subsection{Modelo SIRD discreto}
-% 
 Revisando a literatura, um dos primeiros trabalhos publicados foi o de Calafiore, Novara e Possieri, onde foi elaborado um modelo discreto com base no modelo SIR \cite{calafiore2020modified}. Nesse artigo os autores comentam que o trabalho foi feito de maneira rápida em virtude do contágio da COVID-19, tanto que a publicação se deu em 31 de março. A modelagem utilizou dados até 30 de março e buscou, com um modelo simples, analisar o contágio e a eficiência das medidas preventivas. Abaixo temos o modelo base do artigo
 \begin{equation*}
     \begin{split}
@@ -69,14 +68,8 @@ Para considerar os casos assintomáticos de COVID-19 os pesquisadores considerar
 \end{equation*}
 
 Com essa alteração passa-se a considerar a transmissão do vírus por assintomáticos, resolvendo um dos problemas na modelagem dessa doença. Os resultados dessa modelagem foram interessantes. O modelo se ajustou muito bem aos dados que possuíam, entretanto o modelo subestimou a pandemia, tanto em tempo quanto em infecções. Pelo modelo, o pico de COVID-19 na Itália se daria no começo de abril, com uma quantidade de infectados entre 80 e 90 mil pessoas. Já na realidade o pico se deu na segunda metade de abril com quase 110 mil infectados. Note que o modelo fez uma aproximação razoavelmente boa, aproximando bem o pico da doença.
-% 
-% \subsection{Modelo SEPIAHQRD}
 
-Outro modelo que surgiu nos estágios iniciais da pandemia, mas um pouco mais complicado foi o modelo SEPIAHQRD, proposto por Gatto et al. Eis o modelo SEPIAHQRD \cite{Gatto10484}:
-\begin{figure}[H]
-    \centering
-    \includegraphics[page = 1]{Tikz - PDF/Tikz1.pdf}
-\end{figure}
+Outro modelo que surgiu nos estágios iniciais da pandemia, mas um pouco mais complicado foi o modelo SEPIAHQRD, proposto por Gatto et al. \cite{Gatto10484} e que é ilustrado na Figura \ref{sepiahqrd}.
 
 O que nos dá o seguinte conjunto de equações:
 \begin{equation*}
@@ -99,14 +92,8 @@ O que nos dá o seguinte conjunto de equações:
 \noindent onde os parâmetros $\beta_P$, $\beta_I$ e $\beta_A$ ajustam a probabilidade de transmissão de cada classe transmissora. O trabalho ainda dividiu a população em 107 comunidades distintas e simulou a interação entre estas, além de considerar $\gamma_Q = \gamma_I = \gamma_H$ e $\gamma_A = 2\gamma_I$.
 
 A estimação de parâmetros foi feita com estatística Bayesiana, usando o algoritmo Markov Chain Monte Carlo (MCMC) para computar a distribuição a posteriori.
-% 
-% \subsection{Modelo SIDARTHE}
 
-Além do modelo SEPIAHQRD, outro modelo que surgiu nas fases inicias da pandemia explora o modelo SIDARTHE \cite{JOUR}. Tal modelo possui o seguinte desenho compartimental
-\begin{figure}[H]
-    \centering
-    \includegraphics[page = 1]{Tikz - PDF/Tikz2.pdf}
-\end{figure}
+Além do modelo SEPIAHQRD, outro modelo que surgiu nas fases inicias da pandemia explora o modelo SIDARTHE \cite{JOUR}. O desenho compartimental desse modelo pode ser encontrado na Figura \ref{sidarthe}.
 
 \noindent onde $S$ representa os suscetíveis, $I$ os assintomáticos não diagnosticados, $D$ os assintomáticos diagnosticados, $A$ os sintomáticos não diagnosticados, $R$ os sintomáticos diagnosticados, $T$ os indivíduos hospitalizados, $H$ os indivíduos curados e $E$ os que faleceram. Note que, assim como os modelos anteriores, as mortes que ocorrem por motivo distinto da COVID-19 são desprezadas. Tendo visto a ideia geral do modelo, vamos as equações propostas:
 \begin{equation*}
@@ -127,8 +114,6 @@ Aqui $\alpha$, $\beta$, $\gamma$ e $\delta$ representam taxas de infecção, $\v
 Uma ideia muito interessante proposta no modelo SIDARTHE é a divisão do infectados em compartimentos separados, de acordo com seu status atual (assintomático/sintomático e diagnosticado/não diagnosticado). Essa divisão, juntamente com o estabelecimento de quatro parâmetros de infecção busca refletir a ideia de que pessoas infectadas mas que não sabem que portam o vírus tendem a ter uma taxa de transmissão diferente de pessoas que sabem que portam o vírus. Dessa forma, cada grupo de infectados irá transmitir a doença de acordo com um parâmetro diferente. Entre esses parâmetros, normalmente se tem $\alpha > \gamma$, uma vez que as pessoas tendem a evitar contato com pessoas que, mesmo sem diagnóstico de COVID-19, apresentam sintomas. Além dessa desigualdade, em geral vale também que $\gamma > \beta$ e $\gamma > \delta$, pois espera-se que indivíduos que estão cientes que portam o vírus fiquem em isolamento social.
 
 Para efeito de modelagem, foi considerado $S + I + D + A + R + T + H + E = 1$, ou seja, foram tomadas tais medidas e divido o valor pela população italiana\footnote{Cerca de 60 milhões de pessoas.}. Com uma análise matemática, percebe-se que os equilíbrios desse modelo se dão apenas em estados em que temos $I = D = A = R = T = 0$, ou seja, quando o número de infetados zerar. Durante a modelagem, os autores variaram os parâmetros de acordo com decisões políticas adotadas no país, como a implementação de lockdown, por exemplo. Com essa modelagem, foi obtido um resultado interessante, com curvas similares as dos dados observados.
-% 
-% \subsection{Modelo fSEIRD}
 
 O último modelo analisado foi o fSEIRD (forced SEIRD) com taxa de infecção sendo uma função do tempo com o objetivo de ajustar melhor os dados de acordo com as políticas de isolamento social tomadas pelo governo italiano \cite{piccolomini}.
 
@@ -161,24 +146,14 @@ No modelo, Piccolomini e Zama dividem o tempo em $\rho$ intervalos $[t_k, t_{k +
 Para a calibração do modelo foram utilizadas algumas técnicas estatísticas como a BIC (Bayesian Information Criterion) para verificar qual partição do tempo seria a melhor possível, isto é, a que minimiza a BIC. No artigo, foi utilizada uma partição de $14$ dias para a modelagem na Lombardia e de $7$ dias na Emília-Romanha. Com tais parâmetros, o modelo foi fitado e conseguiu modelar muito bem os dados observados. Além disso, ao fitar o modelo apenas com os dados dos primeiros trinta dias de infecção na Itália o modelo também obteve um bom resultado, com o número de infectados estando bem próximo do número observado nos dados após os trinta primeiros dias de epidemia.
 
 \section{Metodologia}
-% Seção de Metodologia propondo um modelo matemático para a situação epidemiológica do país escolhido justificando a sua adequação para a situação epidemiológica observada até o momento no país. Esta seção deve descrever completamente o modelo e seus compartimentos, todas as suas equações acompanhadas de análise dimensional e descrição e interpretação de todos os parâmetros utilizados. Esta seção deverá ainda descrever o processo de captura dos dados epidemiológicos do país de interesse.
 
-% \subsection{Escolha do Modelo}
-% 
-Após a revisão da literatura e análise de modelos, buscamos um modelo simples e que pudesse modelar de forma eficiente a epidemia. Dessa forma, modelos oriundos do SI foram descartados, uma vez que a reinfecção ocorre raramente \cite{again}. Outra família de modelos descartada foi a do modelo SIR, uma vez que, conforme vão ocorrendo as infecções, um grupo de pessoas expostas\footnote{Pessoas que portam o vírus mas ainda não transmitem o vírus.} vai se formando e, com isso, inclui-se no modelo um compartimento para expostos.
+Após a revisão da literatura e análise de modelos, buscamos um modelo simples e que pudesse modelar de forma eficiente a epidemia. Dessa forma, modelos oriundos do SI foram descartados, uma vez que a reinfecção ocorre raramente \cite{again} \cite{again2}. Outra família de modelos descartada foi a do modelo SIR, uma vez que, conforme vão ocorrendo as infecções, um grupo de pessoas expostas\footnote{Pessoas que portam o vírus mas ainda não transmitem o vírus.} vai se formando e, com isso, inclui-se no modelo um compartimento para expostos.
 
-Com o passar do tempo, as pessoas passam a transmitir o vírus, assim as pessoas migram do compartimento E para o I. Por fim, a partir de I a pessoa irá se recuperar ou irá morrer, então entram os compartimentos R e D, formando, com isso, o modelo SEIRD.\footnote{Mais detalhes sobre cada compartimento serão vistos % na seção \ref{descrição_do_modelo}.}
-mais adiante.}
+Com o passar do tempo, as pessoas passam a transmitir o vírus, assim as pessoas migram do compartimento E para o I. Por fim, a partir de I a pessoa irá se recuperar ou irá morrer, então entram os compartimentos R e D, formando, com isso, o modelo SEIRD.\footnote{Mais detalhes sobre cada compartimento serão vistos mais adiante.}
 
 Entretanto, conforme visto pela revisão da literatura, o modelo SEIRD nativo não conseguiu modelar de forma eficiente a situação italiana, assim, optamos por usar o modelo fSEIRD, ou forced SEIRD, o qual, conforme visto, é um modelo de EDO's adaptado do SEIRD, mas com que os parâmetros possam ser funções do tempo. Dessa forma, com os parâmetros sendo funções, temos a incorporação das decisões de autoridades à respeito do grau de isolamento social, o que possibilita um melhor ajuste aos dados, bem como auxilia no ajuste da nova onda de infecções que está ocorrendo na Itália, algo que não seria possível com o modelo SEIRD nativo.
 
-% \subsection{Descrição do Modelo} \label{descrição_do_modelo}
-% 
-Nosso modelo trabalha de forma análoga aos demais modelos de EDO's, ou seja, de forma compartimental. Para a modelagem, optamos por trabalhar com os valores absolutos em cada compartimento e com população constante, dessa forma, a natalidade e a mortalidade natural foram desprezadas, o que implica em uma população constante\footnote{Nesse caso, população se refere ao número total de indivíduos, isto é, $S + E + I + R + D$.}, logo, sendo $N$ a população italiana, sempre vale que $N = S + E + I + R + D$. Abaixo temos o desenho compartimental do modelo.
-\begin{figure}[H]
-    \centering
-    \includegraphics[page = 1]{Tikz - PDF/Tikz3.pdf}
-\end{figure}
+Nosso modelo trabalha de forma análoga aos demais modelos de EDO's, ou seja, de forma compartimental. Para a modelagem, optamos por trabalhar com os valores absolutos em cada compartimento e com população constante, dessa forma, a natalidade e a mortalidade natural foram desprezadas, o que implica em uma população constante\footnote{Nesse caso, população se refere ao número total de indivíduos, isto é, $S + E + I + R + D$.}, logo, sendo $N$ a população italiana, sempre vale que $N = S + E + I + R + D$. O desenho compartimental do modelo pode ser encontrado na Figura \ref{seird}.
 
 O qual nos dá o seguinte conjunto de equações:
 \begin{equation}
@@ -192,9 +167,10 @@ O qual nos dá o seguinte conjunto de equações:
     \end{split}
 \end{equation}
 
-Como possuímos os dados liberados diariamente pelo \textit{Our World in Data} \cite{owid}, estamos considerando o tempo em dias. Mas note que essas equações ainda não definem completamente o modelo, uma vez que nem todos os parâmetros são constantes. Para finalizar a definição do modelo, dividimos o tempo em $\rho$ intervalos $[t_k, t_{k + 1}], ~k = 0, \dots, \rho -1$, dado que as medidas públicas na Itália foram variando conforme o tempo. Além disso, é interessante tomar uma taxa de infecção decrescente, uma vez que decretos e medidas de isolamento social não são totalmente aplicadas assim que ocorre a publicação da ordem. Assim, definimos
-\[\beta_r(t) = \beta(t_k)\left(1 - \rho_k\dfrac{(t - t_k)}{t}\right), ~t \in (t_k, t_{k + 1}], ~\rho_k \in (0, 1)\]
-\[\beta_e(t) = \beta(t_k)e^{- \rho_k(t - t_k)}, ~t \in (t_k, t_{k + 1}], ~\rho_k \geq 0,\]
+Como possuímos os dados liberados diariamente pelo \textit{Our World in Data} \cite{owid}, estamos considerando o tempo em dias. Mas note que essas equações ainda não definem completamente o modelo, uma vez que nem todos os parâmetros são constantes. Para finalizar a definição do modelo, dividimos o tempo em $\rho$ intervalos $[t_k, t_{k + 1}], ~k = 0, \dots, \rho -1$, onde cada intervalo, com exceção do último, tem $15$ dias. Optamos por essa abordagem em virtude das medidas públicas que foram tomadas na Itália, as quais variaram conforme o tempo.
+
+Além disso, é de nosso interessante tomar uma taxa de infecção decrescente, uma vez que os decretos e as medidas de isolamento social não são totalmente aplicadas assim que ocorre a publicação da ordem, mas vão se aplicando mais efetivamente conforme o tempo passa. Assim, definimos
+\[\beta_r(t) = \beta(t_k)\left(1 - \rho_k\dfrac{(t - t_k)}{t}\right), ~t \in (t_k, t_{k + 1}], ~\rho_k \in (0, 1),\]
 
 \noindent para um valor inicial $\beta(t_0)$ atribuído. Já $\alpha(t)$ e $f(t)$ serão considerados constantes em cada intervalo de tempo, ou seja
 \[\alpha(t) = \alpha_k, ~\alpha_k \geq 0, ~t \in (t_k, t_{k + 1}]\]
@@ -202,52 +178,48 @@ Como possuímos os dados liberados diariamente pelo \textit{Our World in Data} \
 
 Agora, tendo todas as equações definidas, iremos para a descrição de cada compartimento utilizado.
 
-\subsection{Compartimento S}
+\subsection*{Compartimento S}
 
 O primeiro compartimento do modelo é o S, representando a classe das pessoas suscetíveis, isto é, que não estão contaminadas mas que podem contraí-la.
 
 Uma vez que um indivíduo contrai a doença, ele muda da classe S para a classe E, e nunca mais volta a ser suscetível. Isso significa que ou ele morre pela doença ou ele se recupera e se torna imune. A variação desse compartimento se dá por
 \[\dfrac{dS}{dt} = -\dfrac{\beta(t)}{N}SI.\]
 
-Essa equação modela a contaminação da doença fazendo com que os indivíduos contaminados saiam da classe S conforme a lei da ação das massas, ou seja, a quantidade de novos infectados é proporcional ao produto do número de indivíduos suscetíveis com o número de indivíduos infectados. Note que essa proporção é dada pelo parâmetro $\beta(t)$, medido em $dias^{-1}$.\footnote{Uma análise mais detalhada da dimensão de $\beta(t)$, bem como das demais variáveis, será vista % na seção \ref{analise_dimensional}.}
-mais adiante.} A variável I representa o compartimento dos indivíduos infecciosos, e N é a população total do sistema.
+Essa equação modela a contaminação da doença fazendo com que os indivíduos contaminados saiam da classe S conforme a lei da ação das massas, ou seja, a quantidade de novos infectados é proporcional ao produto do número de indivíduos suscetíveis com o número de indivíduos infectados. Note que essa proporção é dada pelo parâmetro $\beta(t)$, medido em $dias^{-1}$.\footnote{Uma análise mais detalhada da dimensão de $\beta(t)$, bem como das demais variáveis, será vista mais adiante.} A variável I representa o compartimento dos indivíduos infecciosos, e N é a população total do sistema.
 
-\subsection{Compartimento E}
+\subsection*{Compartimento E}
 
 Quando um indivíduo S é contaminado por algum I, ele migra para a classe E, que representa a classe dos indivíduos expostos, isto é, que estão com a doença, mas não a transmitem. Sua variação se dá por
 \[\dfrac{dE}{dt} = \dfrac{\beta(t)}{N}SI - \alpha(t) E,\]
 
 \noindent ou seja, essa classe recebe os indivíduos que a classe S perde por contaminação e perde os indivíduos contaminados que passam a transmitir. Essa perda é proporcional ao tamanho da classe, e ajustado pelo parâmetro $\alpha(t)$, medido em $dias^{-1}$.
 
-\subsection{Compartimento I}
+\subsection*{Compartimento I}
 
 A variável I representa a classe dos infecciosos, ou seja, os indivíduos que estão contaminados e que contamina os suscetíveis. Sua variação se dá pela equação
 \[\dfrac{dI}{dt} = \alpha(t) E - \dfrac{1}{T_I}I.\]
 
 Essa classe recebe os indivíduos que passam a ser transmissores e perde para duas classes. Uma delas é a de recuperados, enquanto a outra é a de mortos (pela doença apenas). É claro que as proporções entre essas perdas não são iguais. No modelo, a taxa combinada é $1/T_I$, onde $T_I$ representa o período médio de infecção, em dias.
 
-\subsection{Compartimento R}
+\subsection*{Compartimento R}
 
 A classe R representa os indivíduos que contraíram a doença e se recuperaram dela, ou seja, indivíduos que não transmitem mais e são imunes a ela. A classe só recebe indivíduos da classe I, sem perder nenhum indivíduo. Seu acréscimo se dá pela equação
 \[\dfrac{dR}{dt} = \dfrac{(1 - f(t))}{T_I}I.\]
 
 Como a taxa total de saída da classe I é $1/T_I$, o parâmetro $f(t)$ é a proporção de indivíduos que morre da taxa total $1/T_I$. Por isso que a taxa de saída dessa classe é o complementar $\frac{1 - f(t)}{T_I}$. Esse parâmetro pode depender do tempo, assim como $\beta(t)$ e $\alpha(t)$, mas é adimensional.
 
-\subsection{Compartimento D}
+\subsection*{Compartimento D}
 
 A classe D representa os indivíduos que morreram pela doença. Assim como a classe R, a classe D só recebe indivíduos da classe I, e não perde nenhum indivíduo. Dessa forma, seu acréscimo é dado por
 \[\dfrac{dD}{dt} = \dfrac{f(t)}{T_I}I.\]
 
 Como já definido anteriormente, $f(t)$ é a proporção dos indivíduos que morrem da em relação a taxa total, que é $\frac{1}{T_I}$. 
 
-\subsection{Demais Parâmetros}
+\subsection*{Demais Parâmetros}
 
 Os demais termos do sistema de EDO's ($N$, $\alpha(t)$, $\beta(t)$ e $f(t)$) são parâmetros gerais do modelo. Como já definido anteriormente, $N$ é a população total do sistema, ou seja, $N = S + E + I + R + D$. Já $\beta(t)$ é um parâmetro funcional que denota a taxa de transmissão do vírus, $\alpha(t)$ denota a taxa com que os indivíduos se tornam infecciosos e, finalmente, $f(t)$ representa a fração da população que acaba falecendo em virtude da COVID-19.
 
-% \subsection{Análise Dimensional} \label{analise_dimensional}
-% 
-Como estamos trabalhando com populações, sabemos que $[N] = [S] = [E] = [I] = [R] = [D] = [\text{pessoas}]$. Dessa forma, como comentado % na seção \ref{descrição_do_modelo}
-anteriormente, temos que o tempo é medido em dias, assim, vale que $[T_I] = [\text{dias}]$
+Como estamos trabalhando com populações, sabemos que $[N] = [S] = [E] = [I] = [R] = [D] = [\text{pessoas}]$. Dessa forma, como comentado anteriormente, temos que o tempo é medido em dias, assim, vale que $[T_I] = [\text{dias}]$
 \[\left[\dfrac{dS}{dt}\right] = \left[\dfrac{dE}{dt}\right] = \left[\dfrac{dI}{dt}\right] = \left[\dfrac{dR}{dt}\right] = \left[\dfrac{dD}{dt}\right] = \dfrac{\text{pessoas}}{\text{dias}}.\]
 
 Dessa forma, temos
@@ -280,13 +252,11 @@ Além disso, temos
 
 \noindent de onde conclui-se que $f(t)$ é adimensional.
 
-% \subsection{Obtenção dos Dados}
-% 
 Todos os dados utilizados para realizar a modelagem foram obtidos exclusivamente do Our world in data \cite{owid}, através de sua página voltada a epidemia de COVID-19. Para trabalhar com os mesmos, baixamos o arquivo csv com os dados necessários e manipulamos os mesmos com o SageMath 9.0. Todos os arquivos estarão disponíveis no GitHub do artigo \cite{github}.
 
-\section{Algumas Análises do Modelo}
+\section{Resultados}
 
-Em primeiro lugar é de nosso interesse analisar quais os equilíbrios do modelo proposto, dessa forma, ao igualar todas as equações de \ref{fSEIRD} a zero obtemos\footnote{Não estamos considerando as derivadas de $\beta(t)$ e $\alpha(t)$ pois elas são funções definidas de diferentes formas em cada intervalo de tempo e, além disso, $\alpha(t)$ tem derivada nula em cada um desses intervalos, então optamos por trabalhar com elas durante a análise.}
+Após a definição do modelo fomos verificar se o mesmo é razoável quanto aos equilíbrios gerados. Dessa forma, ao igualar todas as equações de \ref{fSEIRD} a zero obtemos\footnote{Não estamos considerando as derivadas de $\beta(t)$ e $\alpha(t)$ pois elas são funções definidas de diferentes formas em cada intervalo de tempo e, além disso, $\alpha(t)$ tem derivada nula em cada um desses intervalos, então optamos por trabalhar com elas durante a análise.}
 \begin{equation*}
     \begin{split}
         0 & = -\dfrac{\beta(t)}{N}SI, \\
@@ -317,12 +287,197 @@ Além dos equilíbrios, é de nosso interesse conhecer o $\mathcal{R}(t)$ do mod
 \noindent e, em especial, temos também que
 \[\mathcal{R}_0 = \beta(t_0)\cdot T_I.\]
 
+Além da análise de estabilidade analisamos quanta influência cada um dos parâmetros exerce sobre a quantidade total, acumulada, de infectados. Conforme podemos ver os resultados na Figura \ref{sensibilidade}, o parâmetro $\alpha$ é o que exerce maior influência, entretanto a relação entre $\alpha$ e $T_I$ tem menor relevância na dinâmica quando comparada a relação entre $\beta$ e $T_I$. Note que o parâmetro $f$ não aparece nesse diagrama, uma vez que ele dita apenas a porcentagem de infectados que foi a óbito. Já o parâmetro $\rho$ foi incorporado ao parâmetro $\beta$, uma vez que $\beta$ é função do tempo e de $\rho$.
 
+Por fim, realizamos a fitagem do modelo pelo método dos mínimos quadrados, penalizando $1.5$ vezes mais um erro na quantidade de infectados que na quantidade de falecidos, com isso obtemos os parâmetros que podem ser encontrados na Tabela \ref{param}. Ao final do processo de fitagem obtemos as curvas da Figura \ref{fit} para a evolução do total de infectados e mortos. Já a evolução de cada compartimento que podem ser vistas na Figura \ref{resultados}.
 
+Na Figura \ref{resultados} é complicado analisar todas as curvas ao mesmo tempo, pois as curvas de Suscetíveis e de Expostos está alta. Para contornar esse problema podemos ver o mesmo gráfico, mas sem os dois compartimentos citados anteriormente, na Figura \ref{IRDT}.
 
+Além disso, podemos encontrar algumas previsões para a evolução da situação italiana nas Figuras \ref{fitp}, \ref{resultadosp} e \ref{IRDTp}. Na Figura \ref{fig:all} podemos ver todas as curvas separadamente ao mesmo tempo.
 
+Como um dos resultados finais, podemos ver que o $R_0$ no começo das transmissões era igual a $27.64$, enquanto que atualmente é de $16.53$, o que mostra que a doença ainda está forte na Itália, entretanto sua força diminuiu em relação ao começo das transmissões.
 
+\section{Discussão e Conclusão}
 
+Analisando os resultados podemos ver que assim como o modelo de Piccolomini \cite{piccolomini}, nosso modelo conseguiu fitar bem os dados ao utilizar a ideia de parâmetros variando com o tempo, embutindo no modelo a ideia de que as medidas adotadas pelo governo levam tempo para serem completamente aderidas pela população e, à medida que isso ocorre, a taxa de infecção tende a diminuir. Entretanto acabamos por não verificar se ocorreu overfit no modelo, o que acreditamos ser improvável visto que os dados do Our World In Data \cite{owid} indicam, assim como o modelo, uma crescente no número de infectados e mortos.
+
+Outro ponto a ser visto no modelo proposto é a falta de tratamento nos casos de reinfecções, entretanto, conforme discutido anteriormente ao propor o modelo, consideramos desinteressante a ideia de considerar as reinfecções pelo fato de, até o presente momento, serem raras \cite{again} \cite{again2}, fazendo uma diferença relativa muito pequena. Quanto a taxa de natalidade e mortalidade natural optamos por desconsiderar com o intuito de simplificar o modelo, mas essa simplificação acaba por não afetar demasiadamente o modelo, uma vez que, assim como os casos de reinfecção, a diferença relativa causada pelos nascimentos e mortes naturais são pequenas e, além disso, em sentidos opostos, enquanto a taxa de natalidade coloca novos indivíduos para a interação a taxa de mortalidade retira os mesmos da interação, o que diminui ainda mais essa diferença a ponto de quase ocorrer uma compensação entre ambas, o que acabaria gerando novos parâmetros para fitar, os quais teriam relevância mínima em relação ao fenômeno estudado.
+
+Dentre os parâmetros utilizados no modelo dois acabam se destacando na forma com que foram utilizados. O primeiro parâmetro é o $T_I$, o qual pode ser representado como o inverso de um parâmetro $\xi$ que representa a soma das taxas de óbitos e recuperações dos indivíduos infectados, ou seja, os que saem do compartimento $I$. O segundo parâmetro a ser visto é o $f(t)$, o qual representa a proporção de indivíduos que passam do compartimento $I$ para o compartimento $D$, ou seja, aqueles que acabam falecendo em virtude da COVID-19. Na Equação \ref{fSEIRD}, podemos encontrar a expressão
+\[\dfrac{dD}{dt} = \dfrac{f(t)}{T_I}I,\]
+
+\noindent a qual pode nos levar a interpretar $\gamma(t) = \dfrac{f(t)}{T_I}$ como a taxa de mortalidade da COVID-19 no tempo $t$. Com isso, poderíamos reescrever as equações do modelo como
+\begin{equation}
+    \begin{split}
+        \dfrac{dS}{dt} & = -\dfrac{\beta(t)}{N}SI, \\
+        \dfrac{dE}{dt} & = \dfrac{\beta(t)}{N}SI - \alpha(t) E, \\
+        \dfrac{dI}{dt} & = \alpha(t) E - \xi I, \\
+        \dfrac{dR}{dt} & = \left(\xi - \gamma(t)\right) I, \\
+        \dfrac{dD}{dt} & = \gamma(t) I,
+    \end{split}
+\end{equation}
+
+\noindent deixando o modelo mais próximo dos modelos vistos na literatura, sem deixar de ser equivalente ao modelo utilizado nesse trabalho.
+
+De acordo com o modelo, podemos ver que, apesar da Tabela \ref{param} mostrar que $\beta(t)$ vem diminuindo, ou seja, a taxa de contágio vem diminuindo, as medidas tomadas não vem sendo efetivas pois, pela própria construção do parâmetro $\beta(t)$, vemos que o mesmo é decrescente e seu decréscimo depende de $\rho(t)$, o qual vem se mantendo constante e, nos últimos dias, nulo, o que faz como que $\beta(t)$ fique estagnado. Além disso, $\alpha(t)$ teve um leve aumento nos últimos dias, o que implica que mais indivíduos expostos tornaram-se infecciosos, o que faz sentido pelo aumento no número de infectados que vem ocorrendo, o que acaba explicando o alto valor do $R_0$.
+
+O $R_0$ é uma das informações mais importantes à respeito da natureza da epidemia, e é evidente que essa quantidade não é constante. Podemos ver a evolução da quantidade ao longo do tempo na Figura \ref{R0}. Note que o $R_0$ não é contínuo em virtude da construção do $\beta(t)$, o qual apresenta saltos a cada intervalo.
+
+Por fim, podemos ver que estratégias efetivas devem ser tomadas a fim de diminuir a nova crescente nos casos, controlando a epidemia. Além disso, o estudo da prevalência da COVID-19 é de extrema importância para que o governo possa ver onde e como agir, possibilitando uma retomada segura.
+
+\section*{Imagens}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[page = 1]{Tikz - PDF/Tikz1.pdf}
+    \caption{Modelo SEPIAHQRD}
+    \label{sepiahqrd}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[page = 1]{Tikz - PDF/Tikz2.pdf}
+    \caption{Modelo SIDARTHE}
+    \label{sidarthe}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[page = 1]{Tikz - PDF/Tikz3.pdf}
+    \caption{Modelo SEIRD}
+    \label{seird}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/sensibilidade.png}
+    \caption{Análise de Sensibilidade}
+    \label{sensibilidade}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/DTDrTr.png}
+    \caption{Resultado do Fit}
+    \label{fit}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/SEIRDT.png}
+    \caption{Todas as curvas}
+    \label{resultados}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/IRDT.png}
+    \caption{Infectados, Recuperados, Mortos e Infectados acumulados}
+    \label{IRDT}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/DTDrTrp.png}
+    \caption{Previsões x Dados reais}
+    \label{fitp}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/SEIRDTp.png}
+    \caption{Previsão com todas as curvas}
+    \label{resultadosp}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/IRDTp.png}
+    \caption{Previsões para Infectados, Recuperados, Mortos e Infectados acumulados}
+    \label{IRDTp}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.7]{Imagens/R0.png}
+    \caption{$R_0$ em relação ao tempo}
+    \label{R0}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{subfigure}{.33\textwidth}
+        \centering
+        \includegraphics[width = .8\linewidth]{Imagens/S.png}
+        \caption{Suscetíveis}
+        \label{fig:S}
+    \end{subfigure}
+    \begin{subfigure}{.33\textwidth}
+        \centering
+        \includegraphics[width = .8\linewidth]{Imagens/E.png}
+        \caption{Expostos}
+        \label{fig:E}
+    \end{subfigure}
+    \begin{subfigure}{.33\textwidth}
+        \centering
+        \includegraphics[width = .8\linewidth]{Imagens/I.png}
+        \caption{Infectados}
+        \label{fig:I}
+    \end{subfigure}
+    
+    \begin{subfigure}{.33\textwidth}
+        \centering
+        \includegraphics[width = .8\linewidth]{Imagens/R.png}
+        \caption{Recuperados}
+        \label{fig:R}
+    \end{subfigure}
+    \begin{subfigure}{.33\textwidth}
+        \centering
+        \includegraphics[width = .8\linewidth]{Imagens/D.png}
+        \caption{Mortos}
+        \label{fig:D}
+    \end{subfigure}
+    \begin{subfigure}{.33\textwidth}
+        \centering
+        \includegraphics[width = .8\linewidth]{Imagens/T.png}
+        \caption{Total de Infectados}
+        \label{fig:T}
+    \end{subfigure}
+    
+    \caption{Todas as curvas}
+    \label{fig:all}
+\end{figure}
+
+\section*{Tabelas}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+        Dia & $\beta(t)$ & $\alpha(t)$ & $\rho(t)$ & $f(t)$ \\ \hline
+        30 & 1.9745 & 0.012 & 0.2352 & 0.05 \\
+        45 & 1.8197 & 0.012 & 0.2352 & 0.05 \\
+        60 & 1.7127 & 0.012 & 0.2352 & 0.05 \\
+        75 & 1.6321 & 0.0518 & 0.235 & 0.05 \\
+        90 & 1.5682 & 0.0019 & 0.2444 & 0.05 \\
+        105 & 1.5134 & 0.0026 & 0.2444 & 0.05 \\
+        120 & 1.4672 & 0.0007 & 0.2444 & 0.05 \\
+        135 & 1.4274 & 0.0006 & 0.2444 & 0.05 \\
+        150 & 1.3925 & 0.0002 & 0.2444 & 0.05 \\
+        165 & 1.3615 & 0.0002 & 0.2444 & 0.05 \\
+        180 & 1.3338 & 0.0001 & 0.2444 & 0.05 \\
+        195 & 1.3087 & 0.0001 & 0.2444 & 0.05 \\
+        210 & 1.2859 & 0.0001 & 0.2444 & 0.05 \\
+        225 & 1.2649 & 0.0001 & 0.2444 & 0.05 \\
+        240 & 1.2456 & 0.0003 & 0.2444 & 0.05 \\
+        255 & 1.2277 & 0.0003 & 0.2444 & 0.05 \\
+        270 & 1.211 & 0.0004 & 0.2444 & 0.05 \\
+        285 & 1.1955 & 0.0015 & 0.2444 & 0.05 \\
+        300 & 1.1808 & 0.0037 & 0.0 & 0.05 \\
+        315 & 1.1808 & 0.0031 & 0.0 & 0.05 \\
+        330 & 1.1808 & 0.0025 & 0.0 & 0.05
+    \end{tabular}
+    \caption{Parâmetros após a fitagem}
+    \label{param}
+\end{table}
 
 \printbibliography
 
